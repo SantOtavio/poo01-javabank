@@ -1,14 +1,7 @@
 import java.util.Scanner;
 
 public class Conta {
-
-//    public String getPessoa() {
-//        return pessoa;
-//    }
-
-//    public void setPessoa(String pessoa) {
-//        this.pessoa = pessoa;
-//    }
+    Scanner sc = new Scanner(System.in);
 
     public double getSaldo() {
         return saldo;
@@ -94,8 +87,42 @@ public class Conta {
     }
 
     public void saldo() {
-        Scanner sc = new Scanner(System.in);
-
         System.out.println(this.getSaldo());
+    }
+
+    public static void balanceList(String accountNumber, int choose) {
+        if (choose == 1) {
+            System.out.println(Corrente.correntes.get(Integer.parseInt(accountNumber)).getSaldo());
+        } else if (choose == 2) {
+            System.out.println(Credito.creditos.get(Integer.parseInt(accountNumber)).getSaldo());
+        } else if (choose == 3) {
+            System.out.println(Poupanca.poupancas.get(Integer.parseInt(accountNumber)).getSaldo());
+        }
+        Main.userActionsMenu(accountNumber , choose);
+    }
+
+    public static void transferAction(String accountNumber, int choose) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("+++++MENU TRANSFERÊNCIA+++++");
+        System.out.println("Insira o número da conta que deseja transferir dinheiro: ");
+        String accountToTransfer = sc.next();
+        System.out.println("Insira a quantia de dinheiro desejada para a transferência: ");
+        double moneyToTransfer = sc.nextDouble();
+
+        tranferMoney(accountToTransfer, moneyToTransfer, choose, accountNumber);
+    }
+
+    public static void tranferMoney(String accountToTransfer, double moneyToTransfer, int choose, String accountNumber) {
+        if (choose == 1) {
+            Corrente.correntes.get(Integer.parseInt(accountToTransfer)).setSaldo(moneyToTransfer);
+            System.out.println("Transferência realizada no valor de: R$" + moneyToTransfer);
+        } else if (choose == 2) {
+            Credito.creditos.get(Integer.parseInt(accountToTransfer)).setSaldo(moneyToTransfer);
+            System.out.println("Transferência realizada no valor de: R$" + moneyToTransfer);
+        } else if (choose == 3) {
+            Poupanca.poupancas.get(Integer.parseInt(accountToTransfer)).setSaldo(moneyToTransfer);
+            System.out.println("Transferência realizada no valor de: R$" + moneyToTransfer);
+        }
+        Main.userActionsMenu(accountNumber , choose);
     }
 }

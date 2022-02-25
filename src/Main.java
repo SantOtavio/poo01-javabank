@@ -110,7 +110,7 @@ public class Main {
         }
     }
 
-    private static void userActionsMenu(String accountNumber, int choose) {
+    public static void userActionsMenu(String accountNumber, int choose) {
         System.out.println("+++++CONTA Nº " + accountNumber + "++++++" +
                 "\n[1] - Listar saldo" +
                 "\n[2] - Realizar transferência" +
@@ -121,116 +121,39 @@ public class Main {
 
         switch (chooseAction) {
             case 1:
-                balanceList(accountNumber, choose);
+                Conta.balanceList(accountNumber, choose);
                 break;
             case 2:
-                transferAction(accountNumber, choose);
+                Conta.transferAction(accountNumber, choose);
                 break;
             case 3:
-                paymentAction(accountNumber, choose);
+                if (choose == 1) {
+                    Corrente.paymentAction(accountNumber, choose);
+                } else if (choose == 2) {
+                    Credito.paymentAction(accountNumber, choose);
+                } else {
+                    System.out.println("ISTO NÃO É POSSIVEL");
+                    userActionsMenu(accountNumber , choose);
+                }
                 break;
             case 4:
-                withdrawAction(accountNumber, choose);
+                if (choose == 1) {
+                    Corrente.withdrawAction(accountNumber, choose);
+                } else if (choose == 2) {
+                    Credito.withdrawAction(accountNumber, choose);
+                } else if (choose == 3) {
+                    Poupanca.withdrawAction(accountNumber, choose);
+                }
                 break;
             case 5:
-                depositAction(accountNumber, choose);
+                if (choose == 1) {
+                    Corrente.depositAction(accountNumber, choose);
+                } else if (choose == 2) {
+                    System.out.println("ISTO NÃO É POSSIVEL");
+                } else if (choose == 3) {
+                    Poupanca.depositAction(accountNumber, choose);
+                }
                 break;
-        }
-    }
-
-    private static void depositAction(String accountNumber, int choose) {
-        System.out.println("+++++MENU DEPOSITO+++++" +
-                "\nInsira o valor para deposito: ");
-        double depositValue = sc.nextDouble();
-        depositMethod(accountNumber, choose, depositValue);
-    }
-
-    private static void depositMethod(String accountNumber, int choose, double depositValue) {
-        if (choose == 1) {
-            Corrente.correntes.get(Integer.parseInt(accountNumber)).setSaldo(Corrente.correntes.get(Integer.parseInt(accountNumber)).getSaldo() + depositValue);
-            System.out.println("Deposito realizado no valor de: R$" + depositValue);
-            userMenu();
-        } else if (choose == 2) {
-            System.out.println("ISSO NÃO É DISPONÍVEL PARA CONTAS DE CRÊDITO");
-        } else if (choose == 3) {
-            Poupanca.poupancas.get(Integer.parseInt(accountNumber)).setSaldo(Poupanca.poupancas.get(Integer.parseInt(accountNumber)).getSaldo() + depositValue);
-            System.out.println("Deposito realizado no valor de: R$" + depositValue);
-        }
-    }
-
-    private static void withdrawAction(String accountNumber, int choose) {
-        System.out.println("+++++MENU SAQUE+++++" +
-                "\nInsira o valor do saque: ");
-        double withdrawValue = sc.nextDouble();
-
-        withdrawMethod(withdrawValue, choose, accountNumber);
-    }
-
-    private static void withdrawMethod(double withdrawValue, int choose, String accountNumber) {
-        if (choose == 1) {
-            Corrente.correntes.get(Integer.parseInt(accountNumber)).setSaldo(Corrente.correntes.get(Integer.parseInt(accountNumber)).getSaldo() - withdrawValue);
-            System.out.println("Saque realizado no valor de: R$" + withdrawValue);
-        } else if (choose == 2) {
-            Credito.creditos.get(Integer.parseInt(accountNumber)).setLimite(Credito.creditos.get(Integer.parseInt(accountNumber)).getLimite() - withdrawValue);
-            System.out.println("Saque realizado no valor de: R$" + withdrawValue);
-        } else if (choose == 3) {
-            System.out.println("ISTO NÃO É DISPONIVEL PARA CONTAS POUPANÇA");
-            //paymentAction();
-        }
-    }
-
-    private static void paymentAction(String accountNumber, int choose) {
-        System.out.println("+++++MENU PAGAMENTOS+++++" +
-                "\nInsira o valor do pagamento");
-        double paymentValue = sc.nextDouble();
-        System.out.println("\nSCANNEANDO CÓDIGO DE BARRAS, BIP BIP BIP BIP");
-
-        paymentMethod(paymentValue, choose, accountNumber);
-    }
-
-    private static void paymentMethod(double paymentValue, int choose, String accountNumber) {
-        if (choose == 1) {
-            Corrente.correntes.get(Integer.parseInt(accountNumber)).setSaldo(Corrente.correntes.get(Integer.parseInt(accountNumber)).getSaldo() - paymentValue);
-            System.out.println("Pagamento realizado no valor de: R$" + paymentValue);
-        } else if (choose == 2) {
-            Credito.creditos.get(Integer.parseInt(accountNumber)).setSaldo(Credito.creditos.get(Integer.parseInt(accountNumber)).getSaldo() - paymentValue);
-            System.out.println("Pagamento realizado no valor de: R$" + paymentValue);
-        } else if (choose == 3) {
-            System.out.println("ISTO NÃO É DISPONIVEL PARA CONTAS POUPANÇA");
-            //paymentAction();
-        }
-    }
-
-    private static void transferAction(String accountNumber, int choose) {
-        System.out.println("+++++MENU TRANSFERÊNCIA+++++");
-        System.out.println("Insira o número da conta que deseja transferir dinheiro: ");
-        String accountToTransfer = sc.next();
-        System.out.println("Insira a quantia de dinheiro desejada para a transferência: ");
-        double moneyToTransfer = sc.nextDouble();
-
-        tranferMoney(accountToTransfer, moneyToTransfer, choose, accountNumber);
-    }
-
-    private static void tranferMoney(String accountToTransfer, double moneyToTransfer, int choose, String accountNumber) {
-        if (choose == 1) {
-            Corrente.correntes.get(Integer.parseInt(accountToTransfer)).setSaldo(moneyToTransfer);
-            System.out.println("Transferência realizada no valor de: R$" + moneyToTransfer);
-        } else if (choose == 2) {
-            Credito.creditos.get(Integer.parseInt(accountToTransfer)).setSaldo(moneyToTransfer);
-            System.out.println("Transferência realizada no valor de: R$" + moneyToTransfer);
-        } else if (choose == 3) {
-            Poupanca.poupancas.get(Integer.parseInt(accountToTransfer)).setSaldo(moneyToTransfer);
-            System.out.println("Transferência realizada no valor de: R$" + moneyToTransfer);
-        }
-    }
-
-    private static void balanceList(String accountNumber, int choose) {
-        if (choose == 1) {
-            System.out.println(Corrente.correntes.get(Integer.parseInt(accountNumber)).getSaldo());
-        } else if (choose == 2) {
-            System.out.println(Credito.creditos.get(Integer.parseInt(accountNumber)).getSaldo());
-        } else if (choose == 3) {
-            System.out.println(Poupanca.poupancas.get(Integer.parseInt(accountNumber)).getSaldo());
         }
     }
 

@@ -45,14 +45,6 @@ public class Credito extends Conta {
 
 
     public void pagamento(){
-        Scanner sc = new Scanner(System.in);
-
-        double valorPagamento;
-
-        System.out.println("Insira o valor do pagamento: ");
-        valorPagamento = sc.nextDouble();
-
-        this.setSaldo(this.getSaldo() - valorPagamento);
     }
 
 }
